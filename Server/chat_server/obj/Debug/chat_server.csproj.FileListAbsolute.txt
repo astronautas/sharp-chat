@@ -1,0 +1,6 @@
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\chat_server\chat_server\bin\Debug\chat_server.exe.config
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\chat_server\chat_server\bin\Debug\chat_server.exe
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\chat_server\chat_server\bin\Debug\chat_server.pdb
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\chat_server\chat_server\obj\Debug\chat_server.csprojResolveAssemblyReference.cache
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\chat_server\chat_server\obj\Debug\chat_server.exe
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\chat_server\chat_server\obj\Debug\chat_server.pdb
