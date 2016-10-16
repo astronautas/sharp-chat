@@ -1,2 +1,2 @@
-## Sharp Chat
-# IRC Clone, implemented in C# (.NET, Windows Forms)
+# Sharp Chat
+### IRC Clone, implemented in C# (.NET, Windows Forms)
