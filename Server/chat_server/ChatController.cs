@@ -7,19 +7,38 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
+
+/* TODO:
+ * - Refactor singleton
+ * - Extract data to model
+ * - Exceptions
+ */
 
 namespace chat_server
 {
+    public struct User
+    {
+        public string Name { get; set; }
+        public TcpClient Connection { get; set; }
+
+        public User(string name, TcpClient connection)
+        {
+            Name = name;
+            Connection = connection;
+        }
+    }
+
     class ChatController
     {
-        public TcpClient connection1 { get; set; }
-        public TcpClient connection2 { get; set; }
-
         private static bool _hasInstance;
         public static ChatController Instance { get; set; }
 
         public Listener listener;
-        private List<TcpClient> _clients = new List<TcpClient>();
+        private List<User> _clients = new List<User>();
+
+        // Thread signal.
+        public static ManualResetEvent tcpClientConnected =  new ManualResetEvent(false);
 
         private ChatController()
         {
@@ -39,42 +58,44 @@ namespace chat_server
             }
         }
 
-        public void AcceptClient()
+        public void AcceptClient(IAsyncResult result)
         {
-            var client = listener.AcceptTcpClient();
-            _clients.Add(client);
+            // Get the listener that handles the client request.
+            Listener listener = (Listener)result.AsyncState;
 
-            string message = "[SERVER] New client has connected";
-            SendMessageToAll(message);
+            var client = listener.EndAcceptTcpClient(result);
 
-            Logger.GetInstance.Log(message);
+            // Retrieve user information
+            var data = new XmlDocument();
+            data.LoadXml(GetUserData(client));
+
+            User user = new User(data.DocumentElement.GetAttribute("name"), client);
+            _clients.Add(user);
+
+            // Make the server listen for the client messages
+            new Thread(new ThreadStart(() => ListenForMessages(user))).Start();
+
+            // Listen for more clients
+            Listen();
         }
 
         public void Listen()
         {
 
+            listener.BeginAcceptTcpClient(new AsyncCallback(AcceptClient), listener);
+
+            tcpClientConnected.WaitOne();
+        }
+
+        public void ListenForMessages(User user)
+        {
             while (true)
             {
-                if (listener.Pending())
+                if (user.Connection.Connected)
                 {
-                    new Thread(new ThreadStart(AcceptClient)).Start();
+                    GetUserData(user.Connection);
                 }
             }
-
-
-            //if (this.connection1 != null)
-            //{
-            //    this.connection1.ReceiveBufferSize = 200;
-            //    var reader = new StreamReader(this.connection1.GetStream());
-            //    char[] buffer = new char[this.connection1.ReceiveBufferSize];
-
-            //    int bytesRead = reader.Read(buffer, 0, this.connection1.ReceiveBufferSize);
-            //    Array.Resize<Char>(ref buffer, bytesRead);
-
-            //    string dataReceived = new string(buffer);
-
-            //    Console.WriteLine(dataReceived);
-            //}
         }
 
         private void SendMessage(TcpClient client, string message)
@@ -90,9 +111,9 @@ namespace chat_server
 
         private void SendMessageToAll(string message)
         {
-            foreach (var client in _clients)
+            foreach (User client in _clients)
             {
-                SendMessage(client: client, message: message);
+                SendMessage(client: client.Connection, message: message);
             }
         }
 
@@ -102,6 +123,29 @@ namespace chat_server
             {
                 Console.Write("\rListening...");
             }
+        }
+
+        private string GetUserData(TcpClient client)
+        {
+
+            // Using a list as we do not not the length of incoming data
+            List<char> data = new List<char>();
+            char[] buffer = new char[1];
+            int readBytes;
+
+            using (StreamReader netStream = new StreamReader(client.GetStream()))
+            {
+                do { //determine if there is more data, here we read until the socket is closed
+
+                    readBytes = netStream.Read(buffer, 0, buffer.Length);
+                    data.Add(buffer[0]);
+                } while (!(buffer[0] == '\0'));
+            }
+
+            // Remove terminating char from data
+            data.RemoveAt(data.Count - 1);
+
+            return new string(data.ToArray());
         }
     }
 }

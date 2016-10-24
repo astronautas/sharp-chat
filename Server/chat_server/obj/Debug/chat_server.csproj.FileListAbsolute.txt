@@ -4,3 +4,13 @@ C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\chat_serv
 C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\chat_server\chat_server\obj\Debug\chat_server.csprojResolveAssemblyReference.cache
 C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\chat_server\chat_server\obj\Debug\chat_server.exe
 C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\chat_server\chat_server\obj\Debug\chat_server.pdb
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Server\chat_server\bin\Debug\chat_server.exe.config
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Server\chat_server\obj\Debug\chat_server.exe
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Server\chat_server\obj\Debug\chat_server.pdb
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Server\chat_server\bin\Debug\chat_server.exe
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Server\chat_server\bin\Debug\chat_server.pdb
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Server\chat_server\obj\Debug\chat_server.csprojResolveAssemblyReference.cache
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Server\chat_server\obj\Debug\chat_server.Views.ChatWindowView.resources
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Server\chat_server\obj\Debug\chat_server.Views.LogView.resources
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Server\chat_server\obj\Debug\chat_server.Views.UserListView.resources
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Server\chat_server\obj\Debug\chat_server.csproj.GenerateResource.Cache

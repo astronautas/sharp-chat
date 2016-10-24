@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Text;
+using System.Xml;
 
 namespace Chat_Client
 {
@@ -51,15 +53,30 @@ namespace Chat_Client
 
         public bool SendMessage(string message)
         {
-            this.ReceiveBufferSize = message.Length;
+            // Add terminating sign to the string
+            message = message + Char.MinValue;
 
-            var charsToSend = message.ToCharArray();
+            var charsToSend = Encoding.Default.GetChars(Encoding.Default.GetBytes(message));
             var writer = new StreamWriter(this.GetStream());
-            writer.Write(charsToSend, 0, charsToSend.Length);
 
-            writer.Flush();
-
+            try
+            {
+                writer.Write(charsToSend, 0, charsToSend.Length);
+                writer.Flush();
+            } catch (IOException ex)
+            {
+                return false;
+            }
+           
             return true;
+        }
+
+        public bool RequestToChat(string username)
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml($"<command name=\"chatWith\" value=\"{ username}\"></command>");
+
+            return SendMessage(doc.OuterXml);
         }
     }
 }

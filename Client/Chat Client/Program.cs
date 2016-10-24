@@ -15,22 +15,14 @@ namespace Chat_Client
         {
             var client = new ChatClient("lukas123");
 
-            new Thread(() =>
-            {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new ChatClientGui(client));
-            }).Start();
+            //new Thread(() =>
+            //{
+            //    Application.EnableVisualStyles();
+            //    Application.SetCompatibleTextRenderingDefault(false);
+            //    Application.Run(new ChatClientGui(client));
+            //}).Start();
 
-            try
-            {
-                client.Connect(IPAddress.Parse("127.0.0.1"), 8888);
-            } catch (SocketException e)
-            {
-                Console.WriteLine("Cannot connect");
-            }
-
-            client.WaitForData();
+            var console = new ChatConsole(client);
         }
     }
 }
