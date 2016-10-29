@@ -13,7 +13,7 @@ namespace Chat_Client
     {
         static void Main()
         {
-            var client = new ChatClient("lukas123");
+            var client = new ChatClient();
 
             //new Thread(() =>
             //{

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Chat_Client
 
     public class ChatClient : TcpClient
     {
-        public string NickName { get; private set; }
+        public string NickName { get; set; }
         public string Log;
 
         public event ChangeEventHandler LogChanged;
@@ -20,6 +21,11 @@ namespace Chat_Client
         public ChatClient(string nickName)
         {
             NickName = nickName;
+        }
+
+        public ChatClient()
+        {
+
         }
 
         public void WaitForData()
@@ -54,7 +60,7 @@ namespace Chat_Client
         public bool SendMessage(string message)
         {
             // Add terminating sign to the string
-            message = message + Char.MinValue;
+            message = '\u0002' + message + Char.MinValue;
 
             var charsToSend = Encoding.Default.GetChars(Encoding.Default.GetBytes(message));
             var writer = new StreamWriter(this.GetStream());
@@ -71,12 +77,49 @@ namespace Chat_Client
             return true;
         }
 
-        public bool RequestToChat(string username)
+        public bool Authenticate()
         {
             var doc = new XmlDocument();
-            doc.LoadXml($"<command name=\"chatWith\" value=\"{ username}\"></command>");
+            var message = $"<msg command=\"authenticate\"><user username=\"{NickName}\"></user></msg>";
 
-            return SendMessage(doc.OuterXml);
+            return SendMessage(message);            
+        }
+
+        public bool SendMsgToUser(string username, string message)
+        {
+            var doc = new XmlDocument();
+            var xml = $"<msg command=\"sendMsgToUser\"><user username=\"{username}\" message=\"{message}\"></user></msg>";
+
+            return SendMessage(xml);
+        }
+
+        public void ReadStream(Action<string> action)
+        {
+            while (true)
+            {
+                this.ReceiveBufferSize = 200;
+                var netStream = new StreamReader(this.GetStream());
+
+                // Using a list as we do not not the length of incoming data
+                List<char> data = new List<char>(0);
+                char[] buffer = new char[1];
+
+                var readBytes = netStream.Read(buffer, 0, buffer.Length);
+
+                // Read everything from start to end delimeter
+                if (buffer[0] == '\u0002' && readBytes != -1)
+                {
+                    do
+                    {
+                        readBytes = netStream.Read(buffer, 0, buffer.Length);
+                        data.Add(buffer[0]);
+                    } while (!(buffer[0] == '\0'));
+
+                    string combindedString = string.Join("", data.ToArray());
+
+                    action(combindedString);
+                }
+            }
         }
     }
 }
