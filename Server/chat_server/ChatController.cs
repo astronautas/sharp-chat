@@ -40,6 +40,18 @@ namespace chat_server
         // Thread signal.
         public static ManualResetEvent tcpClientConnected =  new ManualResetEvent(false);
 
+        Action<string> messageDelegate;
+
+        private void SendMsgToUser(string username)
+        {
+
+        }
+
+        private Dictionary<string, Action<string>> _router = new Dictionary<string, Action<string>>()
+        {
+            { "sendMsgToUser",  }
+        };
+
         private ChatController()
         {
         }
