@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chat_Client.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -15,14 +16,14 @@ namespace Chat_Client
         {
             var client = new ChatClient();
 
-            //new Thread(() =>
-            //{
-            //    Application.EnableVisualStyles();
-            //    Application.SetCompatibleTextRenderingDefault(false);
-            //    Application.Run(new ChatClientGui(client));
-            //}).Start();
+            new Thread(() =>
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainView(client));
+            }).Start();
 
-            var console = new ChatConsole(client);
+            //var console = new ChatConsole(client);
         }
     }
 }

@@ -53,18 +53,39 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChatClient.cs" />
-    <Compile Include="ChatClientView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ChatClientView.Designer.cs">
-      <DependentUpon>ChatClientView.cs</DependentUpon>
-    </Compile>
     <Compile Include="ChatConsole.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ChatClientView.resx">
-      <DependentUpon>ChatClientView.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="Views\AuthenticationView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\AuthenticationView.Designer.cs">
+      <DependentUpon>AuthenticationView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NavigationView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\NavigationView.Designer.cs">
+      <DependentUpon>NavigationView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\P2PChatView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\P2PChatView.Designer.cs">
+      <DependentUpon>P2PChatView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\MainView.Designer.cs">
+      <DependentUpon>MainView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StartView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\StartView.Designer.cs">
+      <DependentUpon>StartView.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -74,6 +95,21 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Views\AuthenticationView.resx">
+      <DependentUpon>AuthenticationView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\NavigationView.resx">
+      <DependentUpon>NavigationView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\P2PChatView.resx">
+      <DependentUpon>P2PChatView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\MainView.resx">
+      <DependentUpon>MainView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\StartView.resx">
+      <DependentUpon>StartView.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

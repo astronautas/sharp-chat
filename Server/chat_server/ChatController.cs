@@ -165,7 +165,7 @@ namespace chat_server
         {
             var data = new XmlDocument();
             data.LoadXml(parameters);
-            var username = data.DocumentElement.GetAttribute("username");
+            var username = data.DocumentElement.GetAttribute("username" );
 
             user.Name = username;
         }

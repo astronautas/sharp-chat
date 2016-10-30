@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Xml;
@@ -26,6 +27,19 @@ namespace Chat_Client
         public ChatClient()
         {
 
+        }
+
+        public bool ConnectToServer()
+        {
+            try
+            {
+                Connect(IPAddress.Parse("127.0.0.1"), 8888);
+            } catch (SocketException exception)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void WaitForData()
