@@ -1,4 +1,5 @@
-﻿using chat_server.Models;
+﻿using chat_server.Exceptions;
+using chat_server.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,22 +19,68 @@ using System.Xml;
 
 namespace chat_server
 {
-    class ChatController
+    public class ChatController
     {
         private static bool _hasInstance;
         public static ChatController Instance { get; set; }
 
         public Listener listener;
-        private List<User> _clients = new List<User>();
+        private Router _router;
+
+        private EntityManager<User> _userManager = EntityManagerFactory.Instance.GetManager<User>();
+
+
+        // Events
+        private event Action<User> OnUserNotConnectedCheck;
+
+        // Online client list
+        private List<User> _clients;
+        private List<User> Clients
+        {
+            get
+            {
+                if (_clients == null)
+                {
+                    _clients = new List<User>();
+                }
+
+                return _clients;
+            }
+        }
+
+        private List<User> _allClients;
+        private List<User> AllClients
+        {
+            get
+            {
+                if (_allClients == null)
+                {
+                    _allClients = _userManager.All();
+                }
+
+                return _allClients;
+            }
+        }
+
+        public List<ILog> loggers;
 
         // Thread signal.
         public static ManualResetEvent tcpClientConnected =  new ManualResetEvent(false);
 
-        private Dictionary<string, Action<User, string>> _router = new Dictionary<string, Action<User, string>>() {};
-
         private ChatController()
         {
+            _router = new Router();
             loadRoutes();
+
+            OnUserNotConnectedCheck += (user) =>
+            {
+                user.Disconnect();
+
+                _clients.RemoveAll((client) =>
+                {
+                    return client.Name == user.Name;
+                });
+            };
         }
 
         public static ChatController GetInstance()
@@ -52,10 +99,30 @@ namespace chat_server
 
         private void loadRoutes()
         {
-            _router.Add("sendMsgToUser", new Action<User, string>((user, parameters) => 
-                        SendMsgToUser(user, parameters)));
-            _router.Add("authenticate", new Action<User, string>((user, parameters) => 
-                        AuthenticateUser(user, parameters)));
+            _router.AddRoute("sendMsgToUser", BeforeSendMsgToUser);
+            _router.AddRoute("requestToChat", RequestToChatWith);
+            _router.AddRoute("requestConfirmationFromClient", AcceptChatRequest);
+            _router.AddRoute("allUsers", SendAllClients);
+
+            _router.AddRoute("authenticate", new Action<User, string>
+                ((user, parameters) => AuthenticateUser(user, parameters)));
+        }
+
+        public void RequestToChatWith(User requester, string message)
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml(message);
+
+            var userToChatWith = doc.DocumentElement.GetAttribute("username");
+
+            var chatpal = Clients.Find((client) => client.Name == userToChatWith);
+
+            var xmlMessage = $"<msg command=\"receivedChatRequest\" sender=\"{requester.Name}\"></msg>";
+
+            if (chatpal != null)
+            {
+                SendMsgToUser(chatpal, xmlMessage);
+            }
         }
 
         public void AcceptClient(IAsyncResult result)
@@ -66,10 +133,12 @@ namespace chat_server
             var client = listener.EndAcceptTcpClient(result);
 
             User user = new User(client);
-            _clients.Add(user);
+            Clients.Add(user);
 
             // Make the server listen for the client messages
-            new Thread(new ThreadStart(() => ListenForMessages(user))).Start();
+            new Task(delegate { ListenForMessages(user); }).Start();
+
+            Log("Accepted a client connection");
 
             // Listen for more clients
             Listen();
@@ -77,7 +146,7 @@ namespace chat_server
 
         public void Listen()
         {
-
+            Log($"Listening for clients...");
             listener.BeginAcceptTcpClient(new AsyncCallback(AcceptClient), listener);
 
             tcpClientConnected.WaitOne();
@@ -92,7 +161,7 @@ namespace chat_server
                 string receivedData;
 
                 // TODO - ping user to check if it is connected
-                receivedData = GetUserStreamData(netStream);
+                receivedData = GetUserStreamData(netStream, user);
 
                 if (receivedData.Count() > 0)
                 {
@@ -101,49 +170,52 @@ namespace chat_server
                     data.LoadXml(receivedData);
 
                     var cmd   = data.DocumentElement.GetAttribute("command");
-                    var parameters = data.DocumentElement.InnerXml;
 
-                    _router[cmd](user, parameters);
-
-                    // TODO - what if user sends fake commands
+                    try
+                    {
+                        Log($"{user.Name} sent a message " + receivedData);
+                        _router.Route(cmd, user, receivedData);
+                    } catch (UserCommandNotRecognizedException e)
+                    {
+                        Log(e.Message);
+                    }
                 }
             }
         }
 
-        private static void ActiveConsole()
-        {
-            while (true)
-            {
-                Console.Write("\rListening...");
-            }
-        }
-
-        private string GetUserStreamData(StreamReader netStream)
+        private string GetUserStreamData(StreamReader netStream, User user)
         {
             // Using a list as we do not not the length of incoming data
             List<char> data = new List<char>(0);
             char[] buffer = new char[1];
             int readBytes;
 
-            readBytes = netStream.Read(buffer, 0, buffer.Length);
-
-            // Read everything from start to end delimeter
-            if (buffer[0] == '\u0002' && readBytes != -1)
+            try
             {
-                do
+                readBytes = netStream.Read(buffer, 0, buffer.Length);
+
+                // Read everything from start to end delimeter
+                if (buffer[0] == '\u0002' && readBytes != -1)
                 {
+                    do
+                    {
 
-                    readBytes = netStream.Read(buffer, 0, buffer.Length);
-                    data.Add(buffer[0]);
-                } while (!(buffer[0] == '\0'));
-            }
-            else
+                        readBytes = netStream.Read(buffer, 0, buffer.Length);
+                        data.Add(buffer[0]);
+                    } while (!(buffer[0] == '\0'));
+                }
+                else
+                {
+                    return new string(data.ToArray());
+                }
+
+                // Remove terminating char from data
+                data.RemoveAt(data.Count - 1);
+
+            } catch (Exception ex) when (ex is IOException|| ex is ObjectDisposedException)
             {
-                return new string(data.ToArray());
+                OnUserNotConnectedCheck.Invoke(user);
             }
-
-            // Remove terminating char from data
-            data.RemoveAt(data.Count - 1);
 
             return new string(data.ToArray());
         }
@@ -151,38 +223,139 @@ namespace chat_server
         private void WriteToUserStream(User user, string text)
         {
             // Add delimiters
+            StreamWriter writer;
             text = '\u0002' + text + '\0';
 
             var charsToSend = text.ToCharArray();
-            var writer = new StreamWriter(user.Connection.GetStream());
 
-            writer.Write(charsToSend, 0, charsToSend.Length);
-            writer.Flush();
+            try
+            {
+                writer = new StreamWriter(user.Connection.GetStream());
+                writer.Write(charsToSend, 0, charsToSend.Length);
+                writer.Flush();
+            } catch (Exception e)
+            {
+                OnUserNotConnectedCheck.Invoke(user);
+            }
         }
 
         // Route callbacks - data = xml element
         private void AuthenticateUser(User user, string parameters)
         {
+            string acceptanceMessage;
             var data = new XmlDocument();
             data.LoadXml(parameters);
             var username = data.DocumentElement.GetAttribute("username" );
+            var password = data.DocumentElement.GetAttribute("password");
 
+            // Temporary user details
             user.Name = username;
+            user.PasswordHash = password;
+
+            // Get full user details
+            var realUser = _userManager.Get(new Dictionary<string, string>
+            {
+                {"key", "Name" },
+                {"value", user.Name }
+            });
+
+            if (!_userManager.Exists("Name", user.Name))
+            {
+                _userManager.Create(user);
+
+                acceptanceMessage = $"<msg command=\"authConfirmation\" value=\"true\"></msg>";
+            }
+            else
+            {
+                if (realUser.Authenticate(user.PasswordHash)) {
+                    acceptanceMessage = $"<msg command=\"authConfirmation\" value=\"true\"></msg>";
+                }
+                else
+                {
+                    acceptanceMessage = $"<msg command=\"authConfirmation\" value=\"false\"></msg>";
+                    user.PasswordHash = null;
+                }
+            }
+
+            SendMsgToUser(user, acceptanceMessage);
         }
 
-        private void SendMsgToUser(User user, string parameters)
+        private void SendMsgToUser(User recipient, string xmlMessage)
         {
             var data = new XmlDocument();
-            data.LoadXml(parameters);
-
-            var username = data.DocumentElement.GetAttribute("username");
-            var message  = data.DocumentElement.GetAttribute("message");
-
-            var recipient = _clients.FirstOrDefault((client) => client.Name == username);
+            data.LoadXml(xmlMessage);
 
             if (recipient != null)
             {
-                WriteToUserStream(recipient, message);
+                WriteToUserStream(recipient, xmlMessage);
+            }
+        }
+
+        private void AcceptChatRequest(User sender, string xmlMessage)
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml(xmlMessage);
+            var rootEl = doc.DocumentElement;
+
+            var acceptedUsername = rootEl.GetAttribute("acceptedUser");
+            var acceptedClient = Clients.Find((client) => client.Name == acceptedUsername);
+
+            var acceptanceMessage = $"<msg userToChatWith=\"{sender.Name}\" command=\"chatRequestConfirmation\" value=\"true\"></msg>";
+
+            SendMsgToUser(acceptedClient, acceptanceMessage);
+        }
+
+        private void BeforeSendMsgToUser(User sender, string xmlMessage)
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml(xmlMessage);
+            var rootEl = doc.DocumentElement;
+
+            var recipient = Clients.Find((client) => client.Name == rootEl.GetAttribute("username"));
+
+            rootEl.SetAttribute("username", sender.Name);
+
+            SendMsgToUser(recipient, rootEl.OuterXml);
+        }
+
+        private void SendAllClients(User sender, string xmlMessage)
+        {
+            string clientsXml = "<msg command=\"allClients\">";
+
+            var clients = AllClients.Where((client) =>
+            {
+                // Checks if current client is online client
+                var clientMatch = Clients.Find((onlineClient) =>
+                {
+                    return client.Name == onlineClient.Name
+                           && client.Name != sender.Name;
+                });
+
+                if (clientMatch != null)
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
+            });
+
+            foreach (var client in clients)
+            {
+                var nodeXml = $"<user username=\"{client.Name}\"></user>";
+                clientsXml += nodeXml;
+            }
+
+            clientsXml += "</msg>";
+
+            SendMsgToUser(sender, clientsXml);
+        }
+
+        private void Log(string message)
+        {
+            foreach (var logger in loggers)
+            {
+                logger.Log(message);
             }
         }
     }

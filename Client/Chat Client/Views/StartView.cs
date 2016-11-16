@@ -17,9 +17,6 @@ namespace Chat_Client.Views
         public StartView()
         {
             InitializeComponent();
-
-            NavigationView.onCurrentChatBtnClick += LoadCurrentChat;
-            NavigationView.onUsersListBtnClick += LoadUsersList;
         }
 
         private void navigationView1_Load(object sender, EventArgs e)
@@ -33,6 +30,16 @@ namespace Chat_Client.Views
         }
 
         private void LoadCurrentChat()
+        {
+
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
 
         }

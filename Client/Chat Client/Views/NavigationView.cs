@@ -12,8 +12,8 @@ namespace Chat_Client.Views
 {
     public partial class NavigationView : UserControl
     {
-        public static event Action onUsersListBtnClick;
-        public static event Action onCurrentChatBtnClick;
+        public static event System.Action onUsersListBtnClick;
+        public static event System.Action onCurrentChatBtnClick;
 
         public NavigationView()
         {

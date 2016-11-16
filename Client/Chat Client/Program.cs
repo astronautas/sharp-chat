@@ -15,7 +15,7 @@ namespace Chat_Client
         static void Main()
         {
             var client = new ChatClient();
-
+            
             new Thread(() =>
             {
                 Application.EnableVisualStyles();

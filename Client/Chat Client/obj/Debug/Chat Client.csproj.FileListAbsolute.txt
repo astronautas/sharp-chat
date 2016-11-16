@@ -16,7 +16,22 @@ C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Serv
 C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Properties.Resources.resources
 C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat Client.csproj.GenerateResource.Cache
 C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Views.AuthenticationView.resources
-C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Views.P2PChatView.resources
 C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Views.MainView.resources
 C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Views.NavigationView.resources
 C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Views.StartView.resources
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Views.UsersListView.resources
+C:\Users\Lukas\Google Drive\MIF\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Views.CurrentChatView.resources
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\bin\Debug\Chat Client.exe.config
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat Client.exe
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat Client.pdb
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\bin\Debug\Chat Client.exe
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\bin\Debug\Chat Client.pdb
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat Client.csprojResolveAssemblyReference.cache
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Properties.Resources.resources
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Views.AuthenticationView.resources
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Views.NavigationView.resources
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Views.CurrentChatView.resources
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Views.MainView.resources
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Views.StartView.resources
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat_Client.Views.UsersListView.resources
+C:\Users\Lukas\Desktop\MIF Programming\Taikomasis objektinis programavimas C#\Chat Server Project\Client\Chat Client\obj\Debug\Chat Client.csproj.GenerateResource.Cache

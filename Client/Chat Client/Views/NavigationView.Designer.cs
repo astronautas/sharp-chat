@@ -40,7 +40,7 @@
             this.CurrentChatBtn.TabIndex = 0;
             this.CurrentChatBtn.Text = "Current Chat";
             this.CurrentChatBtn.UseVisualStyleBackColor = true;
-            this.CurrentChatBtn.Click += new System.EventHandler(this.UsersListBtn_Click);
+            this.CurrentChatBtn.Click += new System.EventHandler(this.CurrentChatBtn_Click);
             // 
             // UsersListBtn
             // 
@@ -50,16 +50,18 @@
             this.UsersListBtn.TabIndex = 1;
             this.UsersListBtn.Text = "Users";
             this.UsersListBtn.UseVisualStyleBackColor = true;
-            this.UsersListBtn.Click += new System.EventHandler(this.CurrentChatBtn_Click);
+            this.UsersListBtn.Click += new System.EventHandler(this.UsersListBtn_Click);
             // 
             // NavigationView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.UsersListBtn);
             this.Controls.Add(this.CurrentChatBtn);
             this.Name = "NavigationView";
-            this.Size = new System.Drawing.Size(335, 69);
+            this.Size = new System.Drawing.Size(331, 64);
             this.ResumeLayout(false);
 
         }

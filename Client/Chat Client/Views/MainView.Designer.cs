@@ -28,31 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.authenticationScreen1 = new Chat_Client.Views.AuthenticationView();
+            this.mainFlow = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
             // 
-            // authenticationScreen1
+            // mainFlow
             // 
-            this.authenticationScreen1.Location = new System.Drawing.Point(93, 12);
-            this.authenticationScreen1.Name = "authenticationScreen1";
-            this.authenticationScreen1.Size = new System.Drawing.Size(423, 536);
-            this.authenticationScreen1.TabIndex = 0;
-            this.authenticationScreen1.Load += new System.EventHandler(this.authenticationScreen1_Load);
+            this.mainFlow.AutoSize = true;
+            this.mainFlow.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mainFlow.Location = new System.Drawing.Point(13, 13);
+            this.mainFlow.Name = "mainFlow";
+            this.mainFlow.Size = new System.Drawing.Size(0, 0);
+            this.mainFlow.TabIndex = 0;
             // 
-            // ChatView
+            // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(603, 560);
-            this.Controls.Add(this.authenticationScreen1);
-            this.Name = "ChatView";
-            this.Text = "ChatView";
+            this.Controls.Add(this.mainFlow);
+            this.Name = "MainView";
+            this.Text = "Client Chat App";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private AuthenticationView authenticationScreen1;
+        private System.Windows.Forms.FlowLayoutPanel mainFlow;
     }
 }

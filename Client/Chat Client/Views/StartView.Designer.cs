@@ -28,40 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.navigationView1 = new Chat_Client.Views.NavigationView();
-            this.p2PChatView1 = new Chat_Client.Views.P2PChatView();
+            this.welcomeText = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // navigationView1
+            // welcomeText
             // 
-            this.navigationView1.Location = new System.Drawing.Point(88, 3);
-            this.navigationView1.Name = "navigationView1";
-            this.navigationView1.Size = new System.Drawing.Size(335, 69);
-            this.navigationView1.TabIndex = 0;
-            this.navigationView1.Load += new System.EventHandler(this.navigationView1_Load);
-            // 
-            // p2PChatView1
-            // 
-            this.p2PChatView1.Location = new System.Drawing.Point(112, 48);
-            this.p2PChatView1.Name = "p2PChatView1";
-            this.p2PChatView1.Size = new System.Drawing.Size(8, 8);
-            this.p2PChatView1.TabIndex = 1;
+            this.welcomeText.Location = new System.Drawing.Point(3, 482);
+            this.welcomeText.Name = "welcomeText";
+            this.welcomeText.ReadOnly = true;
+            this.welcomeText.Size = new System.Drawing.Size(508, 26);
+            this.welcomeText.TabIndex = 0;
+            this.welcomeText.Text = "Welcome to the chat!";
+            this.welcomeText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // StartView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.p2PChatView1);
-            this.Controls.Add(this.navigationView1);
+            this.Controls.Add(this.welcomeText);
             this.Name = "StartView";
             this.Size = new System.Drawing.Size(514, 530);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private NavigationView navigationView1;
-        private P2PChatView p2PChatView1;
+        private System.Windows.Forms.TextBox welcomeText;
     }
 }
